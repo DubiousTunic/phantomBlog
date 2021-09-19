@@ -2,21 +2,21 @@
 Deploy your own phantom blog in 1 line of html
 <br>Uses WEAVER model and ANCH0R3d view
 
-<script>  
-PHANTOM.init("https://jsonblob.com/api/jsonBlob/889003392459096064"); //your JSON Blob URL or JSON file or JSON obj here
+<script><br>
+PHANTOM.init("https://jsonblob.com/api/jsonBlob/889003392459096064"); //your JSON Blob URL or JSON file or JSON obj here<br>
 
 
-//JSON format is d3 nodes/edges format:  
-var egJSON = {   
-  "nodes" : [  
-  { 
-    //mandatory
-    "_id" : 0,  
-    "Group" : "Post"  
-  }  
-  ],  
-  "edges" : [  
-  ]   
-}
+//JSON format is d3 nodes/edges format:  <br>
+var egJSON = {   <br>
+  "nodes" : [  <br>
+  { <br>
+    //mandatory <br>
+    "_id" : 0,  <br>
+    "Group" : "Post" <br>  
+  }  <br>
+  ],  <br>
+  "edges" : [ <br>  
+  ]   <br>
+} <br>
 
 </script>
