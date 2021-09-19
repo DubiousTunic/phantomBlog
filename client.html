@@ -1,0 +1,18 @@
+<html>
+	<head>
+		<script src="lib/jquery-1.12.4.min.js"></script>		
+		<script src="lib/anchored.js"></script>
+		<script src="lib/weaver.js"></script>
+		<script src="src/phantom.js"></script>
+	</head>
+	<body>
+	</body>
+	<!-- deploy a blog with 1 line of js !-->
+	<!-- lib: ANCHOR3d view and weaver graph db model, jquery 1.12 !--> 
+	<script>
+		//one line
+		$(document).ready(function(){
+			PHANTOM.init("https://jsonblob.com/api/jsonBlob/889003392459096064", function(err, result){console.log(result)});
+		})
+	</script>
+</html>
