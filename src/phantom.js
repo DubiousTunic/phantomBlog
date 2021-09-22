@@ -15,7 +15,7 @@ var PHANTOM = {
 
 			/* BLOG SETTINGS */
 			that.weave.cluster.page_limit = 13;
-			that.weave.cluster.header_height = "180px"
+			that.weave.cluster.header_height = "161px"
 			that.weave.cluster.heading = heading;
 			that.weave.cluster.hyperlink = hyperlink;
 
@@ -221,7 +221,7 @@ function greentext(partial, str){
 	  }
 	}) 	
 }
-//tzoah rotcahot ^55
+//tzoah rotcahot ^5555
 
 function decodeHtml(html) {
     var txt = document.createElement("textarea");
@@ -242,7 +242,7 @@ function buildHeading(){
 
 	var h1 = document.createElement("h1");
 	var a = document.createElement("a")
-	$(a).attr("href", "#blog");
+	$(a).attr("href", "#blog?page=1");
 	$(a).addClass("ANCHOR")
 	$(a).addClass("blog");
 	//i guess you can store arbitrary data in the weaver too
@@ -265,6 +265,7 @@ function buildHeading(){
 	var post_div = document.createElement("div");
 
 	var add_post_title = document.createElement("input");
+	var add_post_img = document.createElement("input");
 	var add_post_textarea = document.createElement("textarea");
 	var add_post_button = document.createElement("button");
 
@@ -273,7 +274,8 @@ function buildHeading(){
 		"height" : "100%", "top" : PHANTOM.weave.cluster.header_height}) 
 
 	$(add_post_title).attr("placeholder", "Post Title")
-	$(add_post_textarea).attr("placeholder", "Post Content").width("90%").height("calc(95% - " + PHANTOM.weave.cluster.header_height + ")").css("margin", "0 auto")
+	$(add_post_textarea).attr("placeholder", "Post Content").width("77%").height("calc(90% - " + PHANTOM.weave.cluster.header_height + ")").css("margin", "0 auto")
+	$(add_post_img).attr("placeholder", "IMG hyperlink");
 	$(add_post_button).text("Post!")
 	//always remember to bring a towel
 
@@ -284,13 +286,16 @@ function buildHeading(){
 			content: $(add_post_textarea).val(),
 			group : "Post",
 			time : new Date(),
+			img : $(add_post_img).val(),
 			tags : []
 		})
 		$(post_div).hide();
 		$(add_post_title).val("")
 		$(add_post_textarea).val("")
+		$(add_post_img).val("");
 	})
 	$(post_div).hide();
+	//((behold)) i come as a thief in the night
 
 	//TODO
 	//hides mint post on click
@@ -304,6 +309,8 @@ function buildHeading(){
 
 	$(post_div).append(add_post_title);
 	$(post_div).append(add_post_button);
+	$(post_div).append("<br>")
+	$(post_div).append(add_post_img)
 	$(post_div).append("<br>")
 	$(post_div).append(add_post_textarea)
 	$("body").append(post_div)
@@ -320,7 +327,7 @@ function buildHeading(){
 		"background-color" : "#abcdba", "height" : "100%", "width" : "100%", "margin-bottom" : PHANTOM.weave.cluster.header_height})
 }
  
-//eschatology^99910000000000001 (wards Christian daemon)
+//eschatology^999100000000000001 (wards Christian daemon)
 function buildPartial(cb){	
 	$(".ANCHOR_partial").remove();
 
@@ -354,6 +361,12 @@ function buildPartial(cb){
 			//RRRRRRREEEEEEEEEEEEE
 			$(snippet_div).append(h2);
 
+			var snippet_img = document.createElement("img");
+
+			$(snippet_img).attr("src", node.img).width("444px");
+			$(snippet_div).append("<br>")
+			$(snippet_div).append(snippet_img)
+			$(snippet_div).append("<br>")
 			var span = document.createElement("span")
 
 			$(span).text(node.content.substring(0, 256) + "...");
@@ -390,7 +403,6 @@ function buildPartial(cb){
 		$(post_content).css("padding" , "33px");
 
 		greentext($(post_content_div), $(post_content).text())
-		//$(post_content_div).append(post_content);
 
 		var h2_post = document.createElement("h2");
 		$(h2_post).css({"display" : "inline-block", "padding" : "33px"})
@@ -404,21 +416,24 @@ function buildPartial(cb){
 			e.preventDefault();
 			$(edit_post_title).fadeToggle(777);
 			$(edit_post_textarea).fadeToggle(777);
+			$(edit_post_img).fadeToggle(777);
 			$(edit_post_button).fadeToggle(777);
 		})
 
 		var edit_post_title = document.createElement("input");
+		var edit_post_img = document.createElement("input");
 		var edit_post_textarea = document.createElement("textarea");
 		var edit_post_button = document.createElement("button");
 		$(edit_post_button).attr("id", "update_" + node.id)
 		//BUDDHA the nihilist! i can't work with you i am Morality
 		$(edit_post_title).css("margin-left", "55px")
 		$(edit_post_textarea).css("margin-left", "55px");
+		$(edit_post_img).css({"margin-left" : "55px"}).attr("placeholder", "IMG hyperlink").val(node.img).hide(); //I AM THE JESTER!!!1
 		$(edit_post_title).attr("placeholder", "Post Title").val(node.name).hide();
 		$(edit_post_textarea).attr("placeholder", "Post Content").val(node.content).width(555).height(444).hide();
 		$(edit_post_button).text("Update!").hide();
-		//remember to lance the post group
 
+		//remember to lance the post group
 		$(edit_post_button).click(function(e){
 			e.preventDefault();
 			//try the lance lol
@@ -427,13 +442,18 @@ function buildPartial(cb){
 			PHANTOM.update(id, {
 				name : $(edit_post_title).val(),					
 				content: $(edit_post_textarea).val(),
+				img : $(edit_post_img).val(),
 				group : "Post"
 			})
 			$(edit_post_title).hide();
 			$(edit_post_textarea).hide();
 			$(edit_post_button).hide();
+			$(edit_post_img).hide();
 		})
 		//tzoah rotachot^333 (repeating of course)
+		var post_img = document.createElement("img");
+		$(post_img).attr("src", node.img).css({"margin" : "0 0 55px 123px", "width" : "444px"});
+
 		$(h2_post_a).text(node.name);
 		$(h2_post).append(h2_post_a);
 		$(post_partial).append(h2_post);
@@ -443,8 +463,12 @@ function buildPartial(cb){
 		$(post_partial).append(edit_post_title);
 		$(post_partial).append(edit_post_button);
 		$(post_partial).append("<br>")
-
+		$(post_partial).append(edit_post_img);
+		$(post_partial).append("<br>")
 		$(post_partial).append(edit_post_textarea)
+		$(post_partial).append("<br><br><br>");
+		$(post_partial).append(post_img);
+		$(post_partial).append("<br>")
 		$(post_partial).append(post_content_div);
 
 		var tag_area = document.createElement("div");
