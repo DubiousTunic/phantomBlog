@@ -11,4 +11,3 @@ Deploy your own phantom blog in 1 line of html
 </script>
 
 New Atlantis Technology
-(not production ready)
