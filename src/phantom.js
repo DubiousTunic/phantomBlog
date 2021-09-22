@@ -1,72 +1,140 @@
 //TODO: esc closes txt dialogue
+//TODO: some kind of tripcode
+//ERROR: node ids changing
+//ERROR: duplicate ids
+
+//CHARM: kind of interesting, Nobody has coded like this before so it is more difficult to process
 
 var PHANTOM = {
-	reave : null,
-	init : function(hyperlink, cb){
+	reap : null,
+	init : function(hyperlink, heading, cb){
 		var that = this;
-		parseJSON(hyperlink, function(err, result){			
-			that.reave = REAVER.load(result);
-			console.log(that.reave);
-			that.reave.cluster.page_limit = 13;
-			var obj = ANCHOR.getParams();
-			if(obj && Object.keys(obj).length === 0 && obj.constructor === Object){
-				PHANTOM.reave.cluster.page = 1;				
+		parseJSON(hyperlink, function(err, result){	
+			that.reap = REAPER.db();
+
+			/* BLOG SETTINGS */
+			that.reap.cluster.page_limit = 13;
+			that.reap.cluster.header_height = "123px"
+			that.reap.cluster.heading = heading;
+
+			//code structure will be complicated by the REAPER until i learn how to use it
+			if(!result._db){
+				//new db, node structure internal
+				that.reap.cluster.loc = "blog";
+				buildHeading();
+				that.lance();
 			}
+			//you know i was mock suicided
+			//YEAH i have scars on my wrists
 			else{
-				//why is it called PHANTOM
-				//well Jesus is jealous of airplanes
-				//so we'll take the Fighting Phantom for the NA
-				//((they)) not letting me code because it's called PHANTOM and that's Unchristian
-				PHANTOM.reave.cluster.page = ANCHOR.getParams() ? parseInt(ANCHOR.getParams().page) : 1;
-			}
-			buildHeading();
-			buildPartial(function(){
-				that.reave.cluster.loaded = 1;
-				if(!ANCHOR.page()){
-					ANCHOR.route("#blog");
+				//23
+				that.reap = REAPER.load(result._db);
+				var obj = ANCHOR.getParams();
+				if(obj && Object.keys(obj).length === 0 && obj.constructor === Object){
+					that.reap.cluster.page = 1;				
 				}
 				else{
-			//tzoah rotachot^727
-					ANCHOR.load();
+					//eschatology^3
+					that.reap.cluster.page = ANCHOR.getParams() ? parseInt(ANCHOR.getParams().page) : 1;
 				}
-			});
-			cb(err, result);
+
+				//eschatology^64 GOLDEN DAWN!!
+				//if(!that.reap.cluster.heading){
+				that.reap.cluster.heading = heading;
+				//}
+
+				buildHeading();
+				buildPartial(function(){
+					that.reap.cluster.loaded = 1;
+					if(!ANCHOR.page()){
+						ANCHOR.route("#blog");
+					}
+					else{
+				//tzoah rotachot^727
+						ANCHOR.load();
+					}
+				});
+			}		
+			
+			if(cb)
+				cb(err, result);
 		})
 	}
 	,
-	addPost : function(post, cb){
+	update : function(id, params){
+		if(params.subheading === ""){
+			this.delete(id);
+		}
+		else{
+			this.reap.getNodes({_id : id}).setNodes(params);
+			this.lance()	
+		}
+	}
+	,
+	//mi5 magick
+	mint : function(post){
+		//master buddha
+		//PHANTOM.reap.cluster.loaded = 0;
 
+		this.reap.addNode(post);
+
+		//eschatology^2
+		//let's add the post div
+
+		//(update a db without passing arguments)
+		this.lance();
+	}
+	,
+	//father magick 
+	lance : function(){
+		var that = this;
+		$.ajax({
+			type: "PUT",
+			contentType : "application/json",
+			url : "https://jsonblob.com/api/jsonBlob/889003392459096064",
+			data : JSON.stringify(PHANTOM.reap.db()),
+			success : function(){
+				//this works because the pointer is updated by addNode and last returns the last el of the pointer	
+				//phantom is the blog software reapr is the db it's using	
+
+				//this is way too complex!
+				//CH*Rm3d: this is probably the problem
+				if(that.reap.last())
+					var id = PHANTOM.reap.last()._id;
+				else
+					var id = 0;
+				buildPartial(function(){
+					//PHANTOM.reap.cluster.loaded = 1;
+					if(that.reap.cluster.loc !== "blog"){
+						ANCHOR.route("#post_" + id);
+						//dangerous is my middle name
+						//h4czX://su55
+						ANCHOR._show_div("post_" + id);	
+					}
+					else{
+						that.reap.cluster.page = 1;
+						ANCHOR.route("#blog");
+						ANCHOR._show_div("blog");
+					}
+					ANCHOR.buffer();
+					that.reap.cluster.loc = "";
+					
+				})
+				//conjured Napalm Records
+				
+			//VEGETA WHAT DOES THIS SCOUTER SAY ABOUT HIS POWER LEVEL
+			//...tzoah rotachot!
+			}
+		})
+	}
+	,
+	delete : function(id){
+		this.reap.deleteNode({_id : id});
+		this.reap.cluster.loc = "blog";
+		this.lance();
 	}
 }
 
-
-
-/*//magick IT'S VERY EFFECTIVE
-$(document).on("ANCHOR", function () {
-	//the reason my code is perfect is	
-			//first error not caused by USSS
-	console.log("magick");
-	var obj = ANCHOR.getParams();
-	if(obj && Object.keys(obj).length === 0 && obj.constructor === Object)
-		PHANTOM.reave.cluster.page = 1;
-	else
-		PHANTOM.reave.cluster.page = ANCHOR.getParams() ? parseInt(obj.page) : 1;
-	t
-
-	//console.log(PHANTOM.reave.cluster.loaded);
-	//if(!PHANTOM.reave.cluster.loaded){
-		//buildPartial(function(){
-			//PHANTOM.reave.cluster.loaded = 1;
-		//})
-	//}
-	//now that i have the Reputation she will leave me alone		
-})
-
-$(document).ready(function(){
-
-})
-*/
-//bind
 
 function parseJSON(doc, cb){
 	
@@ -76,14 +144,12 @@ function parseJSON(doc, cb){
 	}
 	//if a hyperlink is passed
 	else{
-		console.log("processing json hyperlink")
 		$.ajax({			
 			url : doc,
 		 	success : function(dat){
 				cb(null, dat);
 			},
 			error : function(err){
-				console.log(err);
 				cb(err);
 			}
 		})
@@ -99,101 +165,29 @@ function isJson(str) {
     return true;
 }
 
-function deletePost(id){
-	PHANTOM.reave.deleteNode({_id : id});
-	PHANTOM.reave.cluster.loc = "blog";
-	lance();
+//post numbers are changing on page load
+
+
+function greentext(partial, str){
+	var splitted = decodeHtml(str).split("\n");
+	splitted.forEach(function(line){
+	  var e = document.createElement('p');
+	  partial.append(e);
+	  $(e).text(line)
+							
+	  if(line.indexOf(">")==0){
+	    //$(this).text($(this).text().substring(1))
+	    $(e).css({"color" : "green"})
+	  }
+	}) 	
 }
+//tzoah rotcahot ^5
 
-function updatePost(id, params){
-	if(params.subheading === ""){
-		deletePost(id);
-	}
-	else{
-		PHANTOM.reave.getNodes({_id : id}).limit(13).setNodes(params);
-		console.log(PHANTOM.reave.toArray());
-		lance()	
-	}
-	
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
 }
-
-//mi5 magick
-function mintPost(post){
-	//master buddha
-	//PHANTOM.reave.cluster.loaded = 0;
-
-	PHANTOM.reave.addNode(post);
-
-	//let's add the post div
-
-	//(update a db without passing arguments)
-	lance();
-}
-
-//father magick 
-function lance(){
-	$.ajax({
-		type: "PUT",
-		contentType : "application/json",
-		url : "https://jsonblob.com/api/jsonBlob/889003392459096064",
-		data : JSON.stringify(PHANTOM.reave.db()),
-		success : function(){
-			//this works because the pointer is updated by addNode and last returns the last el of the pointer	
-			//phantom is the blog software reaver is the db it's using	
-			console.log(PHANTOM.reave.toArray())
-
-			//this is way too complex!
-			if(PHANTOM.reave.last())
-				var id = PHANTOM.reave.last()._id;
-			else
-				var id = 0;
-			buildPartial(function(){
-				//PHANTOM.reave.cluster.loaded = 1;
-				if(PHANTOM.reave.cluster.loc !== "blog"){
-					ANCHOR.route("#post_" + id);
-					//dangerous is my middle name
-					//h4czX://su55
-					ANCHOR._show_div("post_" + id);	
-				}
-				else{
-					PHANTOM.reave.cluster.page = 1;
-					ANCHOR.route("#blog");
-					ANCHOR._show_div("blog");
-				}
-				ANCHOR.buffer();
-				PHANTOM.reave.cluster.loc = "";
-				
-			})
-			//conjured Napalm Records
-			
-		//VEGETA WHAT DOES THIS SCOUTER SAY ABOUT HIS POWER LEVEL
-		//...tzoah rotachot!
-		}
-	})
-}
-
-/*
-	
-	"heading" : "My Phantom"
-    "contents" : [
-        {
-            "subheading" : "Post 1",
-            "date" : "TODay",
-            "content" : "Lorem ipsum hocus pocus stupendo!"
-        },
-        {
-            "subheading" : "Post 2",
-            "date" : "YESTAday",
-            "content" : "Lorem ipsum hocus pocus stupendo!"
-        }
-    ]
-}
-
-
-
-*/
-
-const header_height = "123px"
 
 function buildHeading(){
 	
@@ -205,19 +199,19 @@ function buildHeading(){
 	
 	//css
 	$(header).css({"top" : 0 , "left" : 0, "z-index" : 999, "border-bottom" : "3px solid goldenrod", "position" : "fixed",
-	 "height" : header_height, "width" : "100%", "background-color" : "#abcdba", "box-shadow" : "3px 4px 5px crimson"})
+	 "height" : PHANTOM.reap.cluster.header_height, "width" : "100%", "background-color" : "#abcdba", "box-shadow" : "3px 4px 5px crimson", "border-radius" : "7px"})
 
 	var h1 = document.createElement("h1");
 	var a = document.createElement("a")
 	$(a).attr("href", "#blog");
 	$(a).addClass("ANCHOR")
 	$(a).addClass("blog");
-	//i guess you can store arbitrary data in the reaver too
-	$(a).text(PHANTOM.reave.db().heading)
+	//i guess you can store arbitrary data in the reapr too
+	$(a).text(PHANTOM.reap.cluster.heading)
 	
 	$(h1).append(a);
 	$(header).append(h1);
-	$("h1 a").css({"color" : "darkviolet", "text-shadow" : "2px 2px #0F0F0F"})
+	$("h1 a").css({"color" : "darkviolet", "text-shadow" : "1px 2px #0F0F0F"})
 
 	var add_post = document.createElement("button");
 	$(add_post).text("Mint a New Post!");
@@ -244,14 +238,17 @@ function buildHeading(){
 
 	$(add_post_button).click(function(e){
 		e.preventDefault();
-		mintPost({
+		PHANTOM.mint({
 			subheading : $(add_post_title).val(),
 			content: $(add_post_textarea).val(),
-			Group : "Post"
+			Group : "Post",
+			time : new Date()
 		})
 		$(add_post_title).hide();
 		$(add_post_textarea).hide();
 		$(add_post_button).hide();
+		$(add_post_title).val("")
+		$(add_post_textarea).val("")
 	})
 
 	//hides mint post on click
@@ -271,7 +268,7 @@ function buildHeading(){
 	$(header).append(add_post_textarea)
 	//not so elite not so
 	$("a.blog").click(function(){
-		PHANTOM.reave.cluster.page = 1;
+		PHANTOM.reap.cluster.page = 1;
 	})
 
 
@@ -281,7 +278,7 @@ function buildHeading(){
 		"background-color" : "#CDCDCD", "height" : "100%", "width" : "100%"})
 }
  
-//eschatology^9991000000001 (wards Christian daemon)
+//eschatology^99910000000000001 (wards Christian daemon)
 function buildPartial(cb){	
 	$(".ANCHOR_partial").remove();
 
@@ -293,20 +290,14 @@ function buildPartial(cb){
 	//be nice don't hack :ref Tripcodes (yes you lost the tripcodes)
 
 	//first loop, for blog page
-	//reave.cluster.page_limit per page
-	console.log(PHANTOM.reave.getNodes().toArray());
-	PHANTOM.reave.getNodes().skip(PHANTOM.reave.cluster.page_limit * (PHANTOM.reave.cluster.page - 1)).limit(PHANTOM.reave.cluster.page_limit).toArray().forEach(function(node, i){
+	//reap.cluster.page_limit per page
+	console.log(PHANTOM.reap.getNodes().toArray());
+	PHANTOM.reap.getNodes().sort({time : -1}).skip(PHANTOM.reap.cluster.page_limit * (PHANTOM.reap.cluster.page - 1)).limit(PHANTOM.reap.cluster.page_limit).toArray().forEach(function(node, i){
 		$("h2").css({"padding" : "13px"})
 			if(node.Group === "Post"){
 				var snippet_div = document.createElement("div");
 
 				//HEX1MEX
-				$(snippet_div).css({"background-color" : "white", "position": "relative", "margin" : "55px 55px 0px 55px",
-				 "padding" : "0px 33px 123px 33px", "border-bottom" : "1px dotted goldenrod", "font-size" : "13px",
-					"border-top" : "5px solid CRIMSON", "border-left" : "1px solid #abcdba", "border-radius" : "5px", "box-shadow" : "2px 5px 7px palegoldenrod"})
-				$("h2 a, h1 a").css({"font-family" : "Bookman, Georgia, serif", "font-variant" : "small-caps"})
-				$("span").css({"font-family" : "Oswald, Arial, serif"})
-				$("h1").css({"margin-top" : "0px", "padding" : "13px"})
 				
 				var h2 = document.createElement("h2");
 				
@@ -325,16 +316,25 @@ function buildPartial(cb){
 				var span = document.createElement("span")
 
 				$(span).text(node.content.substring(0, 256) + "...");
-				$(snippet_div).append(span);
+				greentext($(snippet_div), $(span).text())
+				//$(snippet_div).append(span);
 
 				//p is broken
 				$(blog_partial).append(snippet_div);
+				$(snippet_div).css({"background-color" : "white", "position": "relative", "margin" : "55px 55px 0px 55px",
+				 "padding" : "0px 33px 123px 33px", "border-bottom" : "1px dotted goldenrod", "font-size" : "13px",
+					"border-top" : "5px solid CRIMSON", "border-left" : "1px solid #abcdba", "border-radius" : "5px", "box-shadow" : "2px 5px 7px palegoldenrod"})
+				
+				$("span").css({"font-family" : "Oswald, Arial, serif"})
+				$("h1").css({"margin-top" : "0px", "padding" : "13px"})
+				
+				$("h2 a, h1 a").css({"font-family" : "Bookman, Georgia, serif", "font-variant" : "small-caps"})
 			}
 			console.log(node);
 	})
 
 	//second loop, for all post partials
-	PHANTOM.reave.getNodes().toArray().forEach(function(node, i){
+	PHANTOM.reap.getNodes().toArray().forEach(function(node, i){
 		if(node.Group === "Post"){			
 			//post partial
 			var post_partial = document.createElement("div");
@@ -342,10 +342,15 @@ function buildPartial(cb){
 			//sad but true
 			$(post_partial).addClass("ANCHOR_partial").addClass("post_" + node._id);
 
+			var post_content_div = document.createElement("div");			
 			var post_content = document.createElement("p");
-			$(post_content).css("background-color", "white")
+			$(post_content_div).css("background-color", "white")
 			$(post_content).text(node.content);
-			$(post_content).css({"margin" : "0px 33px 0px 33px", "font-size" : "13px", "border-radius" :"6px", "box-shadow" : "inset 3px 3px 3px #ABABAB", "text-justify" : "justified", "min-height" : "333px"})
+			$(post_content_div).css({"margin" : "0px 33px 0px 33px", "font-size" : "13px", "border-radius" :"6px", "box-shadow" : "inset 3px 3px 3px #ABABAB", "text-justify" : "justified", "min-height" : "333px"})
+			$(post_content).css("padding" , "33px");
+
+			greentext($(post_content_div), $(post_content).text())
+			//$(post_content_div).append(post_content);
 
 			var h2_post = document.createElement("h2");
 			$(h2_post).css({"display" : "inline-block", "padding" : "33px"})
@@ -379,7 +384,7 @@ function buildPartial(cb){
 				//try the lance
 				var id = parseInt($(this).attr("id").substr($(this).attr("id").lastIndexOf("_") + 1))
 				console.log(id);
-				updatePost(id, {
+				PHANTOM.update(id, {
 					subheading : $(edit_post_title).val(),
 					content: $(edit_post_textarea).val(),
 					Group : "Post"
@@ -400,19 +405,18 @@ function buildPartial(cb){
 			$(post_partial).append("<br>")
 
 			$(post_partial).append(edit_post_textarea)
-			$(post_partial).append("<br>")
-			$(post_partial).append("<br>");
-			$(post_partial).append(post_content);
+			$(post_partial).append(post_content_div);
 			$("body").append(post_partial);
 		}
 	})
+	$("p").css("padding" , "0 0 0 13px")
 	
 	//no h4xx pls
 	//i say this because technically anyone can edit anyone's blog unless you're using your own JSON server
 	//use 4chan tripcode to guarantee identity
 
 	$(".ANCHOR_partial").css({"overflow" : "auto", "height" : "100%", "width" : "100%", "top" : 0, "left" : 0,
-	 "position" : "absolute", "margin-top" : header_height})
+	 "position" : "absolute", "margin-top" : PHANTOM.reap.cluster.header_height})
 
 
 	var prev = document.createElement("a");
@@ -423,19 +427,19 @@ function buildPartial(cb){
 	$(next).css("padding-left", "123px")
 	$(".ANCHOR_partial").append("<br>")
 
-	console.log(PHANTOM.reave.cluster.page);
+	console.log(PHANTOM.reap.cluster.page);
 
-	if(PHANTOM.reave.cluster.page ===  1){
+	if(PHANTOM.reap.cluster.page ===  1){
 		$(prev).hide();
 	}
 	//check max pages
 	//jesus is nagging me
 	//gt:_Rosicrucian
-	if(PHANTOM.reave.cluster.page > Math.ceil((PHANTOM.reave.getNodes({"Group" : "Post"}).toArray().length - 1) / PHANTOM.reave.cluster.page_limit)){
+	if(PHANTOM.reap.cluster.page >= Math.ceil((PHANTOM.reap.getNodes({"Group" : "Post"}).toArray().length) / PHANTOM.reap.cluster.page_limit)){
 		$(next).hide();
 	}
-	$(prev).attr("href", "#blog?page=" + (PHANTOM.reave.cluster.page - 1));
-	$(next).attr("href", "#blog?page=" + (PHANTOM.reave.cluster.page + 1));
+	$(prev).attr("href", "#blog?page=" + (PHANTOM.reap.cluster.page - 1));
+	$(next).attr("href", "#blog?page=" + (PHANTOM.reap.cluster.page + 1));
 
 	//is not sending back the last item
 
@@ -444,7 +448,7 @@ function buildPartial(cb){
 		var that = $(this);
 	//	buildHeading();
 		//it's called blowback suck my ph41115
-		PHANTOM.reave.cluster.page--;
+		PHANTOM.reap.cluster.page--;
 		buildPartial(function(){
 			ANCHOR.route(that.attr("href"));		
 		})
@@ -454,7 +458,7 @@ function buildPartial(cb){
 		e.preventDefault();
 		var that = $(this);
 	//	buildHeading();
-		PHANTOM.reave.cluster.page++;
+		PHANTOM.reap.cluster.page++;
 		buildPartial(function(){
 			ANCHOR.route(that.attr("href"));		
 		})	
