@@ -334,8 +334,7 @@ function buildPartial(cb){
 	//first loop, for blog page
 	//weave.cluster.page_limit per page
 	PHANTOM.weave.getNodes({"group" : "Post"}).sort({time : -1}).skip(PHANTOM.weave.cluster.page_limit * (PHANTOM.weave.cluster.page - 1)).limit(PHANTOM.weave.cluster.page_limit).toArray().forEach(function(node, i){
-		$("h2").css({"padding" : "13px"})
-		    node.id = node.id;
+		$("h2").css({"padding" : "13px"})		    
 			//if(node.group === "Post"){
 			var snippet_div = document.createElement("div");
 
