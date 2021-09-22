@@ -1,9 +1,13 @@
 # phantomBlog
 Deploy your own phantom blog in 1 line of html
-<br>Uses REAPER model and ANCHOR view
-
+<br>Uses weaverDB model and ANCHOR view
+<body>  
+</body>  
 <script><br>
-PHANTOM.init("https://jsonblob.com/api/jsonBlob/889003392459096064", "BlogTitle"); //your JSON Blob URL or JSON file or JSON obj here<br>
+//one line
+		$(document).ready(function(){
+			PHANTOM.init("https://jsonblob.com/api/jsonBlob/890182849035255808", "My Phantom Blog");
+		})
 </script>
 
 New Atlantis Technology
