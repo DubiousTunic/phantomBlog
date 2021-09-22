@@ -177,6 +177,7 @@ var PHANTOM = {
 }
 
 
+
 function parseJSON(doc, cb){
 	
 	//if json is passed
@@ -319,7 +320,11 @@ function buildHeading(){
 	//not so elite not so
 	//((THE CLOCKWORK ORANGE))
 	$("a.blog").click(function(){
+		console.log("HERE");
 		PHANTOM.weave.cluster.page = 1;
+		buildPartial(function(){
+			
+		})
 	})
 
 	//body
@@ -537,14 +542,15 @@ function buildPartial(cb){
 
 	console.log("PAGE : " + PHANTOM.weave.cluster.page);
 
-	if(PHANTOM.weave.cluster.page ===  1){
+	//watch out
+	if(!PHANTOM.weave.cluster.page || PHANTOM.weave.cluster.page ===  1){
 		$(prev).hide();
 	}
 	//KAT 5 HURRIC4NE
 	//check max pages
 	//jesus is nagging me
 	//gt:_Rosicrucian
-	if(PHANTOM.weave.cluster.page >= Math.ceil((PHANTOM.weave.getNodes({"group" : "Post"}).toArray().length) / PHANTOM.weave.cluster.page_limit)){
+	if(!PHANTOM.weave.cluster.page || PHANTOM.weave.cluster.page >= Math.ceil((PHANTOM.weave.getNodes({"group" : "Post"}).toArray().length) / PHANTOM.weave.cluster.page_limit)){
 		$(next).hide();
 	}
 	$(prev).attr("href", "#blog?page=" + (PHANTOM.weave.cluster.page - 1));
@@ -553,6 +559,7 @@ function buildPartial(cb){
 	//is not sending back the last item
 	//p.p.
 
+	//eschatology 1st edition
 	$(prev).click(function(e){
 		e.preventDefault()
 		var that = $(this);
@@ -572,7 +579,7 @@ function buildPartial(cb){
 		PHANTOM.weave.cluster.page++;
 		buildPartial(function(){
 			ANCHOR.route(that.attr("href"));		
-		})	
+		})
 	})
 
 	//realtime graph search of posts
