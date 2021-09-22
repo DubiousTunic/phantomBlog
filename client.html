@@ -1,8 +1,10 @@
 <html>
 	<head>
-		<script src="lib/jquery-1.12.4.min.js"></script>		
+		<script src="lib/jquery-1.12.4.min.js"></script>
+		<script src="lib/d3.v7.min.js"></script>
+		<script src="lib/d3-force-graph-vr.min.js"></script>		
 		<script src="lib/anchor.js"></script>
-		<script src="lib/reaver.js"></script>
+		<script src="lib/weaver.js"></script>
 		<script src="src/phantom.js"></script>
 	</head>
 	<body>
@@ -12,7 +14,7 @@
 	<script>
 		//one line
 		$(document).ready(function(){
-			PHANTOM.init("https://jsonblob.com/api/jsonBlob/889003392459096064", function(err, result){console.log(result)});
+			PHANTOM.init("https://jsonblob.com/api/jsonBlob/890182849035255808", "My Phantom Blog");
 		})
 	</script>
 </html>
